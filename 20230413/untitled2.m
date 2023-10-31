@@ -1,0 +1,31 @@
+% 20 midterm exam
+clear; clf; format long
+p=@(u) 1./(1+exp(-u));
+dp=@(u) exp(-u)./(1+exp(-u)).^2;
+E =@(y,t) sum(0.5*(y-t).^2)/6;
+x = [-2 -1 0 1 2 5]; t = [0 0 0 0 1 1];
+plot(x,0*x+0.5,'r-','linewidth',3); hold on
+plot(x,t,'bo','linewidth',3);
+w0=-1; w=1;
+u=w0+w*x;
+y=p(u);
+E1=E(y,t);
+plot(x,y,'go-','linewidth',1);
+eta=5; tol=1.0e-5; err=3*tol;
+while err>tol
+for i=1:length(x)
+dEdw0=(y(i)-t(i))*dp(u(i));
+dEdw=(y(i)-t(i))*dp(u(i))*x(i);
+w0=w0-eta*dEdw0;
+w=w-eta*dEdw;
+end
+u=w0+w*x;
+y=p(u);
+E2=E(y,t);
+err=abs(E1-E2);
+E1=E2;
+plot(x,y,'go-','linewidth',1);
+end
+grid on
+axis([-2.2 5.2 -0.1 1.1])
+title('Aoxuan Zhang')
